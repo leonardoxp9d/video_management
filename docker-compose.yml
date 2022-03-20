@@ -1,0 +1,32 @@
+version: "3.7"
+
+services:
+  database:
+    image: postgres
+    container_name: database_video_management
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=video_management
+    volumes:
+      - pgdata:/data/postgres_video_management
+
+  app:
+    build: .
+    container_name: video_management
+    restart: always
+    ports: 
+      - 3336:3336
+    volumes:
+      - .:/usr/video_management
+    links:
+      - database
+    depends_on:
+      - database
+
+volumes:
+  pgdata:
+    driver: local
